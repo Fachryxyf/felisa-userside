@@ -680,13 +680,13 @@ function getInitials(fullName) {
 }
 
 // Fungsi untuk memuat testimoni dari API
+// GANTI SELURUH FUNGSI ANDA DENGAN INI
 async function loadTestimonials() {
     const testimonialContainer = document.querySelector('#testimonials .scroller__inner');
-    if (!testimonialContainer) return; // Hentikan jika kontainer tidak ditemukan
+    if (!testimonialContainer) return;
 
     try {
-        // Panggil API yang sudah kita buat
-        const response = await fetch('http://localhost:3000/api/reviews/public');
+        const response = await fetch(`${CONFIG.api.baseUrl}/reviews/public`);
         if (!response.ok) {
             throw new Error('Gagal memuat data testimoni');
         }
@@ -696,7 +696,6 @@ async function loadTestimonials() {
         if (result.success && result.data.length > 0) {
             let testimonialsHTML = '';
             
-            // Buat HTML untuk setiap testimoni
             result.data.forEach(review => {
                 const starCount = Math.round(review.total_score / 20);
                 let starsHTML = '';
@@ -704,31 +703,30 @@ async function loadTestimonials() {
                     starsHTML += i < starCount ? '★' : '☆';
                 }
 
+                // Logika untuk menampilkan avatar atau inisial
+                const avatarHTML = (review.avatar_url && review.avatar_url.startsWith('http'))
+                    ? `<img src="${review.avatar_url}" alt="Avatar ${review.reviewer_name}" />`
+                    : `<div class="avatar-initial">${getInitials(review.reviewer_name)}</div>`;
+
                 testimonialsHTML += `
                     <article class="testimonial-card">
                         <figure>
                             <blockquote><p>"${review.comment}"</p></blockquote>
-                          <figcaption>
-                              ${(review.avatar_url && review.avatar_url.startsWith('http')) ? 
-                                  // JIKA avatar_url ADA dan dimulai dengan 'http'
-                                  `<img src="${review.avatar_url}" alt="Avatar ${review.reviewer_name}" />` : 
-                                  // JIKA TIDAK, tampilkan inisial
-                                  `<div class="avatar-initial">${getInitials(review.reviewer_name)}</div>`
-                              }
-                              <span>${review.reviewer_name}</span>
-                          </figcaption>
+                            <figcaption>
+                                ${avatarHTML}
+                                <span>${review.reviewer_name}</span>
+                            </figcaption>
                         </figure>
                         <div class="testimonial-card__rating">${starsHTML}</div>
                     </article>
                 `;
             });
             
-            // Tampilkan HTML di kontainer
-            testimonialContainer.innerHTML = testimonialsHTML;
-
-            // Duplikasi konten agar animasi scroll berjalan mulus (sesuai CSS Anda)
-            const clonedContent = testimonialContainer.cloneNode(true);
-            testimonialContainer.parentElement.appendChild(clonedContent);
+            // ===============================================
+            // INI BAGIAN YANG DIPERBAIKI
+            // Langsung duplikasi string HTML-nya
+            // ===============================================
+            testimonialContainer.innerHTML = testimonialsHTML + testimonialsHTML;
 
         } else {
             testimonialContainer.innerHTML = '<p style="text-align:center;">Belum ada testimoni.</p>';
