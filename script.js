@@ -8,12 +8,14 @@
 // =================================================================
 const CONFIG = {
   cloudinary: {
-    cloudName: 'YOUR_CLOUD_NAME', // Ganti dengan cloud name Anda
-    uploadPreset: 'YOUR_UPLOAD_PRESET', // Ganti dengan upload preset Anda
-    apiKey: 'YOUR_API_KEY' // Ganti dengan API key Anda
+    cloudName: 'daemnvfpi',
+    uploadPreset: 'felisa',
+    apiKey: '169471696182659'
   },
   api: {
-    baseUrl: '/api', // Base URL API Anda
+    baseUrl: isLocal 
+      ? 'http://localhost:3000/api'
+      : 'felisa-adminside.vercel.app/api',
     reviewsEndpoint: '/reviews'
   },
   rating: {
@@ -25,7 +27,6 @@ const CONFIG = {
       B5: { weight: 0.05, name: 'Pelayanan Customer Service' }
     }
   },
-  defaultAvatar: 'https://res.cloudinary.com/demo/image/upload/v1/avatar_default.png'
 };
 
 // =================================================================
@@ -467,6 +468,7 @@ function initializeModalEvents() {
  * Handle form submission
  * @param {Event} event - Form submit event
  */
+// GANTI SELURUH FUNGSI ANDA DENGAN INI
 async function handleSubmit(event) {
   event.preventDefault();
   
@@ -478,13 +480,15 @@ async function handleSubmit(event) {
   try {
     // Ambil data dari form
     const formData = new FormData(event.target);
+    
+    // 1. Buat data ulasan dengan avatarUrl di-set ke null pada awalnya
     const reviewData = {
       productId: currentProductId,
       productName: currentProductName,
       reviewerName: formData.get('reviewerName').trim(),
       comment: formData.get('comment').trim(),
       ratings: { ...currentRatings },
-      avatarUrl: CONFIG.defaultAvatar,
+      avatarUrl: null, // <-- NILAI AWALNYA KOSONG/NULL
       timestamp: new Date().toISOString()
     };
     
@@ -497,17 +501,18 @@ async function handleSubmit(event) {
     // Hitung total score
     reviewData.totalScore = calculateTotalScore(reviewData.ratings);
     
-    // Upload avatar jika ada
+    // 2. Cek apakah ada file yang diunggah
     const avatarFile = formData.get('avatar');
     if (avatarFile && avatarFile.size > 0) {
       showNotification('Mengupload foto profil...', 'info');
+      // 3. JIKA ADA, upload dan timpa nilai avatarUrl yang tadinya null
       reviewData.avatarUrl = await uploadToCloudinary(avatarFile);
     }
     
     // Log data untuk debugging
-    console.log('Review Data:', reviewData);
+    console.log('Final Review Data to be sent:', reviewData);
     
-    // Kirim ke API
+    // 4. Kirim data yang sudah final ke API
     showNotification('Mengirim ulasan...', 'info');
     const response = await sendReviewToAPI(reviewData);
     
@@ -654,3 +659,84 @@ console.log('🚀 AyudCraft Enhanced JavaScript loaded successfully!');
 console.log('📊 Rating system with SAW method ready');
 console.log('☁️ Cloudinary integration ready');
 console.log('🔗 API integration ready');
+
+// =================================================================
+// 13. GET INITIAL + API REVIEW
+// =================================================================
+
+function getInitials(fullName) {
+    if (!fullName) return '';
+    const names = fullName.split(' ');
+    let initials = '';
+    for (let i = 0; i < names.length; i++) {
+        if (names.length > 0 && names [i]) {
+            initials += names [i].charAt(0).toUpperCase();
+        }
+        if (initials.length >= 2) break; // Ambil maksimal 2 inisial
+    }
+    return initials;
+}
+
+// Fungsi untuk memuat testimoni dari API
+async function loadTestimonials() {
+    const testimonialContainer = document.querySelector('#testimonials .scroller__inner');
+    if (!testimonialContainer) return; // Hentikan jika kontainer tidak ditemukan
+
+    try {
+        // Panggil API yang sudah kita buat
+        const response = await fetch('http://localhost:3000/api/reviews/public');
+        if (!response.ok) {
+            throw new Error('Gagal memuat data testimoni');
+        }
+
+        const result = await response.json();
+        
+        if (result.success && result.data.length > 0) {
+            let testimonialsHTML = '';
+            
+            // Buat HTML untuk setiap testimoni
+            result.data.forEach(review => {
+                const starCount = Math.round(review.total_score / 20);
+                let starsHTML = '';
+                for (let i = 0; i < 5; i++) {
+                    starsHTML += i < starCount ? '★' : '☆';
+                }
+
+                testimonialsHTML += `
+                    <article class="testimonial-card">
+                        <figure>
+                            <blockquote><p>"${review.comment}"</p></blockquote>
+                          <figcaption>
+                              ${(review.avatar_url && review.avatar_url.startsWith('http')) ? 
+                                  // JIKA avatar_url ADA dan dimulai dengan 'http'
+                                  `<img src="${review.avatar_url}" alt="Avatar ${review.reviewer_name}" />` : 
+                                  // JIKA TIDAK, tampilkan inisial
+                                  `<div class="avatar-initial">${getInitials(review.reviewer_name)}</div>`
+                              }
+                              <span>${review.reviewer_name}</span>
+                          </figcaption>
+                        </figure>
+                        <div class="testimonial-card__rating">${starsHTML}</div>
+                    </article>
+                `;
+            });
+            
+            // Tampilkan HTML di kontainer
+            testimonialContainer.innerHTML = testimonialsHTML;
+
+            // Duplikasi konten agar animasi scroll berjalan mulus (sesuai CSS Anda)
+            const clonedContent = testimonialContainer.cloneNode(true);
+            testimonialContainer.parentElement.appendChild(clonedContent);
+
+        } else {
+            testimonialContainer.innerHTML = '<p style="text-align:center;">Belum ada testimoni.</p>';
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        testimonialContainer.innerHTML = '<p style="text-align:center;">Gagal memuat testimoni.</p>';
+    }
+}
+
+// Panggil fungsi saat halaman selesai dimuat
+document.addEventListener('DOMContentLoaded', loadTestimonials);

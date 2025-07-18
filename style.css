@@ -186,7 +186,7 @@ body {
   -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
   mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
 }
-.scroller__inner { display: flex; flex-direction: column; gap: 20px; animation: scroll-vertical 40s linear infinite; }
+.scroller__inner { display: flex; flex-direction: column; gap: 20px; animation: scroll-vertical 20s linear infinite; }
 .testimonial-scroller:hover .scroller__inner { animation-play-state: paused; }
 @keyframes scroll-vertical {
   0% { transform: translateY(0); }
@@ -205,6 +205,19 @@ body {
 .testimonial-card figcaption { display: flex; align-items: center; gap: 12px; margin-top: 20px; font-weight: 600; }
 .testimonial-card figcaption img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-color); }
 .testimonial-card__rating { margin-top: 15px; color: #ffc107; font-size: 18px; text-align: right; }
+.avatar-initial {
+    width: 50px; /* Sesuaikan dengan ukuran gambar profil Anda */
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f0f0f0; /* Warna latar belakang */
+    color: #333; /* Warna teks inisial */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
 
 /* =================================================================
    7. GALLERY (CSS MARQUEE)
