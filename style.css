@@ -1,0 +1,515 @@
+/* =================================================================
+   1. PENGATURAN GLOBAL & VARIABLE WARNA
+   Desain modern dengan palet warna hangat dan font seimbang.
+================================================================= */
+:root {
+  --primary-color: #fbc6a4;   /* Oranye/Peach Utama */
+  --secondary-color: #ffe8dc; /* Peach Sangat Terang */
+  --accent-color: #ff8c42;    /* Oranye Aksen/Tombol */
+  --background-soft: #fffaf5; /* Krem/Off-white yang lebih hangat */
+  --text-dark: #3a3a3a;      /* Hitam Lembut */
+  --text-light: #6d6d6d;     /* Abu-abu */
+  --white-color: #ffffff;
+  --green-wa: #10c065;
+  --border-color: #f0e4d9;   /* Border yang lebih lembut */
+  --shadow-color: rgba(0, 0, 0, 0.08);
+
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Poppins', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--white-color);
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 5vw, 3rem); /* Ukuran font responsif */
+  text-align: center;
+  color: var(--text-dark);
+  margin-top: 0;
+  margin-bottom: 50px;
+}
+
+/* =================================================================
+   2. HEADER & EFEK SCROLL
+================================================================= */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 30px;
+  position: sticky; /* Menempel di atas saat scroll */
+  top: 0;
+  z-index: 100;
+  background-color: #fffdfa;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  overflow: hidden;
+}
+
+.header.scrolled {
+  box-shadow: 0 4px 20px var(--shadow-color);
+  background-color: rgba(255, 253, 250, 0.85); /* Efek transparan */
+  backdrop-filter: blur(8px);
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  right: -25px;
+  width: 200px;
+  height: 120px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cpath fill='%23fde2d0' d='M200 97.4c-19.4-2.3-39.1-4.8-51.1-14.7-11.4-9.4-12.9-25.2-17.1-39-3.9-12.9-9.9-25.9-22.5-31.4-12.5-5.5-28.1-.9-41.9 5.3C53.6 24 41.5 34.4 28.2 42.3 13.8 50.1 5.3 56.6 0 62.6c15.3-5.2 31.2-8.3 46.5-9.3 14.8-1 29.5.1 43.6 4.8 14.1 4.7 27.5 13.2 40.7 22.3 13.3 9.1 26.8 17.6 42.1 20.3-1.4-1-2.8-2-4.2-3.1-14-9.8-28-19.7-41.8-29.9-13.8-10.2-27.5-20.4-42.1-27.3-14.7-6.9-30-10.4-45.6-8.2 14.3-8.8 30.2-15.5 46.4-19.7 16.2-4.2 33-5.5 49-2.3 16 3.2 30.5 10.9 41.9 22.5 11.4 11.6 18.2 26.7 22.5 42.1 4.3 15.4 3.7 32.1-4.3 46.4-2.2-1.3-4.5-2.6-6.7-3.9z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.header.scrolled::after { opacity: 0; }
+
+.header__logo-link {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.header__logo-img { width: 45px; transition: transform 0.3s ease; }
+.header__logo-img:hover { transform: scale(1.1) rotate(-10deg); }
+.header__title { font-family: var(--font-heading); font-size: 28px; margin: 0; color: var(--text-dark); }
+
+/* =================================================================
+   3. HERO SECTION DENGAN CTA
+================================================================= */
+.hero {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  padding: 50px 30px;
+  text-align: center;
+  color: var(--white-color);
+  overflow: hidden;
+}
+
+/* ATURAN BARU UNTUK VIDEO */
+.hero__video-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 0; /* Pastikan video ada di lapisan paling belakang */
+}
+
+.hero__overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.3)); /* Overlay sedikit lebih gelap agar tulisan jelas */
+  z-index: 1; /* Overlay di atas video */
+}
+
+.hero__content { 
+  position: relative; 
+  z-index: 2; /* Konten di atas overlay */
+  max-width: 700px; 
+}
+.hero__title { font-family: var(--font-heading); font-size: clamp(2.8rem, 6vw, 4.5rem); margin-bottom: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+.hero__description { font-size: 1.25rem; line-height: 1.7; max-width: 550px; margin-left: auto; margin-right: auto; text-shadow: 0 1px 5px rgba(0,0,0,0.3); }
+.hero__cta-btn {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 12px 30px;
+  background-color: var(--accent-color);
+  color: var(--white-color);
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.hero__cta-btn:hover { background-color: #e07b39; transform: translateY(-3px); }
+
+/* =================================================================
+   4. PRODUCT CHOICE SECTION
+================================================================= */
+.product-choice { padding: 80px 30px; background-color: var(--white-color); }
+.product-choice__options { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
+.bucket-btn {
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 5px 15px var(--shadow-color);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center; color: var(--text-dark);
+}
+.bucket-btn:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(255, 140, 66, 0.25); }
+.bucket-btn img { width: 120px; height: auto; margin-bottom: 15px; }
+.bucket-btn p { margin: 0; font-weight: 600; font-size: 1.1rem; }
+
+/* =================================================================
+   5. FORM ULASAN & STYLING (DI DALAM MODAL)
+================================================================= */
+/* Styling untuk form yang di-generate JS tetap di sini */
+.review-form-container { background-color: transparent; border: none; box-shadow: none; padding: 0; }
+/* Styling lain (input, label, dll) dari file lama tetap relevan dan akan berfungsi di dalam modal baru */
+
+/* =================================================================
+   6. TESTIMONIALS (VERTICAL MARQUEE)
+================================================================= */
+.testimonials { padding: 80px 0; background-color: var(--background-soft); }
+.testimonial-scroller {
+  max-width: 600px;
+  margin: 0 auto;
+  height: 400px; /* Tentukan tinggi area scroll */
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+}
+.scroller__inner { display: flex; flex-direction: column; gap: 20px; animation: scroll-vertical 40s linear infinite; }
+.testimonial-scroller:hover .scroller__inner { animation-play-state: paused; }
+@keyframes scroll-vertical {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); } /* -50% karena konten diduplikasi */
+}
+.testimonial-card {
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  display: flex; flex-direction: column;
+}
+.testimonial-card blockquote { margin: 0; padding: 0; font-style: italic; color: var(--text-light); flex-grow: 1; position: relative; padding-left: 15px; }
+.testimonial-card blockquote::before { content: '“'; position: absolute; left: -10px; top: -15px; font-family: var(--font-heading); font-size: 3.5rem; color: var(--primary-color); opacity: 0.4; }
+.testimonial-card figcaption { display: flex; align-items: center; gap: 12px; margin-top: 20px; font-weight: 600; }
+.testimonial-card figcaption img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-color); }
+.testimonial-card__rating { margin-top: 15px; color: #ffc107; font-size: 18px; text-align: right; }
+
+/* =================================================================
+   7. GALLERY (CSS MARQUEE)
+   Menggunakan animasi CSS murni untuk performa yang mulus.
+================================================================= */
+.gallery {
+  padding: 80px 0; /* Memberi ruang di atas dan bawah */
+  background-color: var(--white-color);
+}
+
+.gallery-scroller {
+  max-width: 100%; /* Memenuhi lebar layar */
+  overflow: hidden;
+  /* Efek gradasi transparan di sisi kiri dan kanan */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.scroller__inner--horizontal {
+  display: flex;
+  gap: 20px; /* Jarak antar item galeri */
+  width: max-content; /* Membuat lebar kontainer sesuai total lebar item */
+  animation: scroll-horizontal 20s linear infinite;
+}
+
+/* Jeda animasi saat kursor mouse di atas galeri */
+.gallery-scroller:hover .scroller__inner--horizontal {
+  animation-play-state: paused;
+}
+
+/* Keyframes untuk animasi horizontal */
+@keyframes scroll-horizontal {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.gallery-item {
+  width: 320px; /* Lebar setiap item galeri */
+  flex-shrink: 0;
+  background-color: var(--white-color);
+  border-radius: 20px;
+  box-shadow: 0 8px 25px var(--shadow-color);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.gallery-item figure {
+  margin: 0;
+  width: 100%;
+  transition: transform 0.4s ease;
+  
+  /* --- TAMBAHKAN 4 BARIS INI --- */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; 
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gallery-item figcaption {
+  font-weight: 600;
+  margin-top: 15px;
+  font-size: 1.1rem;
+  padding: 0 15px 15px;
+  text-align: center;
+}
+
+/* =================================================================
+   8. FOOTER MODERN
+   Layout responsif dengan Grid, ikon SVG, dan CTA yang jelas.
+================================================================= */
+.site-footer {
+  background: var(--background-soft);
+  color: var(--text-dark);
+  padding: 60px 40px 20px;
+  border-top: 1px solid var(--border-color);
+  position: relative; /* Ini sudah ditambahkan sebelumnya, pastikan tetap ada */
+  z-index: 10;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto 50px;
+  align-items: center;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Kolom Kiri */
+.footer-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin: 0 0 15px;
+  font-size: 1.8rem;
+  color: var(--text-dark);
+}
+
+.footer-socials {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.footer-socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0,0,0,0.05);
+  border-radius: 50%;
+  color: var(--text-dark); /* Warna ikon diambil dari sini */
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-socials a:hover {
+  background-color: var(--accent-color);
+  color: var(--white-color); /* Warna ikon menjadi putih saat hover */
+  transform: translateY(-3px);
+}
+
+.footer-socials svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor; /* Kunci agar warna SVG bisa diubah dengan CSS */
+}
+
+/* Kolom Tengah */
+.footer-tagline {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-light);
+  padding-right: 20px;
+}
+
+/* Kolom Kanan */
+.footer-cta-heading {
+  font-family: var(--font-heading);
+  margin: 0 0 15px;
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.footer-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--accent-color);
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 14px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  align-self: flex-start; /* Agar tombol tidak meregang penuh */
+}
+
+.footer-cta-button:hover {
+  background: #e07b39;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(255, 140, 66, 0.3);
+}
+
+.footer-cta-button svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+/* Baris Copyright */
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* Penyesuaian untuk layar kecil */
+@media (max-width: 768px) {
+  .site-footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .footer-content {
+    text-align: center;
+  }
+  .footer-column {
+    align-items: center; /* Membuat semua item di tengah saat mobile */
+  }
+  .footer-tagline {
+    padding-right: 0;
+  }
+  .footer-cta-button {
+    align-self: center; /* Tombol juga di tengah */
+  }
+}
+
+/* =================================================================
+   9. MODAL STYLING BARU
+================================================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(30, 30, 30, 0.5); /* Warna lebih gelap */
+  backdrop-filter: blur(8px); /* Efek blur background */
+  display: flex; justify-content: center; align-items: center;
+  z-index: 1000;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.modal-overlay.active { opacity: 1; visibility: visible; }
+.modal-content {
+  position: relative;
+  background-color: var(--white-color);
+  padding: 40px;
+  border-radius: 20px;
+  max-width: 700px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px) scale(0.95); /* Posisi awal untuk animasi */
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
+}
+.modal-overlay.active .modal-content { transform: translateY(0) scale(1); opacity: 1; }
+.modal-close-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 32px; cursor: pointer; color: #aaa; transition: color 0.2s, transform 0.3s; }
+.modal-close-btn:hover { color: var(--text-dark); transform: rotate(90deg); }
+
+/* Kode styling dari file lama untuk form dipertahankan karena masih relevan */
+#feedback-form label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-dark); }
+#feedback-form input[type="text"], #feedback-form textarea, #feedback-form input[type="file"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; font-family: var(--font-body); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+#feedback-form input[type="text"]:focus, #feedback-form textarea:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.2); }
+.criteria-list { margin-bottom: 20px; }
+.criterion { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 15px; background-color: var(--background-soft); border-radius: 10px; border-left: 4px solid var(--primary-color); }
+.criterion label { margin-bottom: 0; font-size: 0.95rem; }
+/* Aturan CSS baru yang sudah diperbaiki */
+.stars {
+  cursor: pointer;
+  display: inline-block; /* Pastikan container bintang rapi */
+}
+
+.star {
+  font-size: 28px;
+  color: #dcdcdc; /* Warna dasar bintang (abu-abu) */
+  transition: color 0.2s, transform 0.2s;
+  display: inline-block;
+}
+
+/* 1. Aturan untuk hover (memberi pratinjau) */
+.stars:hover .star {
+  color: #ffc107; /* Saat mouse di atas grup, semua bintang jadi kuning */
+}
+
+.stars .star:hover ~ .star {
+  color: #dcdcdc; /* Bintang setelah yang di-hover kembali jadi abu-abu */
+}
+
+/* 2. Aturan untuk state setelah diklik (final) */
+.star.selected {
+  color: #ffc107 !important; /* Warna bintang yang sudah dipilih (kuning) */
+}
+.submit-btn { display: block; width: 100%; padding: 15px; background-color: var(--accent-color); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background-color 0.3s, transform 0.2s; }
+.submit-btn:hover { background-color: #e07b39; transform: translateY(-2px); }
+
+/* =================================================================
+   10. RESPONSIVENESS
+================================================================= */
+@media (max-width: 768px) {
+  .section-title { margin-bottom: 30px; }
+  .header { padding: 15px 20px; }
+  .header__title { font-size: 24px; }
+  .header__logo-link { left: 20px; }
+  .hero { min-height: 80vh; }
+  
+  .product-choice, .testimonials, .gallery, .footer { padding-left: 20px; padding-right: 20px; }
+  .product-choice { padding-top: 60px; padding-bottom: 60px; }
+  .testimonials, .gallery { padding-top: 60px; padding-bottom: 60px; }
+
+  .testimonial-scroller { height: 350px; }
+  .criterion { flex-direction: column; align-items: flex-start; gap: 10px; }
+  
+  .footer__content { grid-template-columns: 1fr; text-align: center; }
+  .footer__column--left { align-items: center; }
+  .footer__socials { margin-top: 20px; justify-content: center; }
+  .wa-button { margin: 0 auto; }
+}
