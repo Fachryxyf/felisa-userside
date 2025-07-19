@@ -235,7 +235,12 @@ async function uploadToCloudinary(file) {
  */
 async function sendReviewToAPI(reviewData) {
   try {
-    const response = await fetch(`${CONFIG.api.baseUrl}${CONFIG.api.reviewsEndpoint}`, {
+    const finalUrl = `${CONFIG.api.baseUrl}${CONFIG.api.reviewsEndpoint}`;
+
+    // TAMBAHKAN BARIS INI UNTUK DEBUGGING
+    console.log('Mencoba mengirim data ke URL:', finalUrl); 
+
+    const response = await fetch(finalUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -243,14 +248,14 @@ async function sendReviewToAPI(reviewData) {
       },
       body: JSON.stringify(reviewData)
     });
-    
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || `API Error: ${response.status} ${response.statusText}`);
     }
-    
+
     return await response.json();
-    
+
   } catch (error) {
     console.error('API request error:', error);
     throw new Error(`Failed to send review: ${error.message}`);
