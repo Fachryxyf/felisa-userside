@@ -526,6 +526,7 @@ async function handleSubmit(event) {
     // Sukses
     console.log('Review submitted successfully:', response);
     showNotification('Ulasan berhasil dikirim! Terima kasih atas feedback Anda.', 'success');
+    loadTestimonials(); 
     
     // Tutup modal setelah delay
     setTimeout(() => {
