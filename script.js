@@ -17,7 +17,7 @@ const CONFIG = {
   api: {
     baseUrl: isLocal 
       ? 'http://localhost:3000/api'
-      : 'felisa-adminside.vercel.app/api',
+      : 'https://felisa-adminside.vercel.app/api',
     reviewsEndpoint: '/reviews'
   },
   rating: {
