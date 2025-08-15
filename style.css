@@ -265,6 +265,14 @@ body {
   transition: transform 0.3s ease;
 }
 
+.gallery-item img {
+  width: 100%;
+  height: 250px; /* sesuaikan tinggi yang kamu mau */
+  object-fit: cover;
+  display: block;
+}
+
+
 .gallery-item:hover {
   transform: translateY(-5px) scale(1.02);
 }
@@ -279,12 +287,6 @@ body {
   flex-direction: column;
   justify-content: space-between;
   height: 100%; 
-}
-
-.gallery-item img {
-  width: 100%;
-  height: auto;
-  display: block;
 }
 
 .gallery-item figcaption {
