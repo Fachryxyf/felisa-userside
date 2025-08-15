@@ -22,11 +22,11 @@ const CONFIG = {
   },
   rating: {
     criteria: {
-      B1: { weight: 0.10, name: 'Kualitas Bahan' },
-      B2: { weight: 0.30, name: 'Desain & Kreativitas' },
-      B3: { weight: 0.15, name: 'Ketepatan Waktu' },
-      B4: { weight: 0.40, name: 'Kepuasan Keseluruhan' },
-      B5: { weight: 0.05, name: 'Pelayanan Customer Service' }
+      B1: { weight: 0.10, name: 'Waktu pengerjaan' },
+      B2: { weight: 0.30, name: 'Harga' },
+      B3: { weight: 0.15, name: 'Bahan' },
+      B4: { weight: 0.40, name: 'Design' },
+      B5: { weight: 0.05, name: 'Packaging & Pengiriman' }
     }
   },
 };
